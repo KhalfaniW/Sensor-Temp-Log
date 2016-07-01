@@ -1,0 +1,44 @@
+#!/usr/bin/python
+import subprocess
+import time
+import os
+from subprocess import check_output
+from time import gmtime, strftime
+
+f = open('/home/khalfani/SENSOR DATA',"r") 
+first_lines=f.readlines()
+f.close()
+f = open('/home/khalfani/SENSOR DATA Backup',"w") 
+f.writelines(first_lines)
+f.close()
+time.sleep(10)
+
+#create array
+
+first_lines=[]
+for i in range(299):
+	first_lines.append("Unknown\n")
+
+first_lines.append(subprocess.check_output("sensors").replace("\n"," ",3))#write the first reading at the bottom
+
+f = open('/home/khalfani/SENSOR DATA',"w") 
+f.writelines(first_lines)
+f.close()
+
+#now constantly update
+
+while True:	
+	f = open('/home/khalfani/SENSOR DATA',"r") 
+	current_array=f.readlines()
+	del current_array[0]
+	current_array.append(strftime("%Y-%m-%d %H:%M:%S")+subprocess.check_output("sensors").replace("\n"," ",3))
+	f.close()
+	f = open('/home/khalfani/SENSOR DATA',"r+")
+	f.writelines(current_array)
+	time.sleep(.1)
+	f.close()
+
+
+
+
+
