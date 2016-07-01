@@ -26,11 +26,12 @@ f.writelines(first_lines)
 f.close()
 
 #now constantly update
-
+#the temperature at the bottom is the most recent
 while True:	
 	f = open('/home/khalfani/SENSOR DATA',"r") 
 	current_array=f.readlines()
 	del current_array[0]
+	#			     current date and time
 	current_array.append(strftime("%Y-%m-%d %H:%M:%S")+subprocess.check_output("sensors").replace("\n"," ",3))
 	f.close()
 	f = open('/home/khalfani/SENSOR DATA',"r+")
