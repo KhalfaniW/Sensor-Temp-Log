@@ -8,30 +8,33 @@ from time import gmtime, strftime
 f = open('/home/khalfani/SENSOR DATA',"r") 
 first_lines=f.readlines()
 f.close()
+#copy the file info to backup so that you can copy the info when form when it last died
 f = open('/home/khalfani/SENSOR DATA Backup',"w") 
 f.writelines(first_lines)
 f.close()
-time.sleep(10)
+
 
 #create array
 
 first_lines=[]
-for i in range(299):
+for i in range(299):#fill the file up
 	first_lines.append("Unknown\n")
 
-first_lines.append(subprocess.check_output("sensors").replace("\n"," ",3))#write the first reading at the bottom
+first_lines.append(subprocess.check_output("sensors").replace("\n"," ",3))
+#update the array writing the first sensor input
 
 f = open('/home/khalfani/SENSOR DATA',"w") 
 f.writelines(first_lines)
 f.close()
 
-#now constantly update
-#the temperature at the bottom is the most recent
+#now constantly update;
+#remember the temperature at the bottom is the most recent
 while True:	
 	f = open('/home/khalfani/SENSOR DATA',"r") 
+	#the sensor data is the represntation of a mutable array
 	current_array=f.readlines()
 	del current_array[0]
-	#			     current date and time
+	#			     current date and time       sensor information            all on one line
 	current_array.append(strftime("%Y-%m-%d %H:%M:%S")+subprocess.check_output("sensors").replace("\n"," ",3))
 	f.close()
 	f = open('/home/khalfani/SENSOR DATA',"r+")
